@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+  background-color: #0f0f0f;
+}
+
+/* Base styles */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  color: #ffffff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/*
+ * 组件预览容器隔离
+ * 防止子组件中的 fixed 定位元素逃逸到视口
+ */
+.preview-container {
+  isolation: isolate;
+  contain: layout style paint;
+  position: relative;
+  /* transform 创建新的包含块，将 fixed 转换为相对于此元素定位 */
+  transform: translateZ(0);
+}
+
+/*
+ * 强制覆盖 fixed 定位
+ * 使用高特异性选择器确保覆盖 Tailwind 类
+ */
+.preview-container .fixed,
+.preview-container [class*="fixed"] {
+  position: absolute !important;
+}
+
+/* 限制 z-index 防止逃逸 */
+.preview-container [class*="z-"] {
+  z-index: 1 !important;
+}
+
+/* Skeleton wave animation */
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-wave::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: wave 1.6s linear infinite;
+}
+
+/* Progress component animations */
+@keyframes progress-stripes {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* Bars loading animation */
+@keyframes bars-pulse {
+  0%,
+  100% {
+    height: 20%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+/* Reduced motion preferences for Bars */
+@media (prefers-reduced-motion: reduce) {
+  [style*="bars-pulse"] {
+    animation: none !important;
+    height: 50% !important;
+  }
+}
